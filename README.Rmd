@@ -1,0 +1,14 @@
+---
+title: "Introduction to Open Data Science"
+output:
+  html_document:
+    theme: readable
+---
+
+# About the Course
+
+This course is about open research tools with open data. It teaches how to use R, RStudio, RMarkdown, and GitHub to analyse data.
+
+# Course Diary
+
+See my course diary here <https://gintarebaublyte.github.io/IODS-project/>
