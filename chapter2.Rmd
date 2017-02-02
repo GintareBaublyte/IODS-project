@@ -150,8 +150,17 @@ The multiple R-Squared shows how well the chosed regression model fits the data.
 ##Diagnostic Plots
 ###Residuals vs Fitted values, Normal QQ-plot and Residuals vs Leverage
 
+The assumptions for the model are:
+- The errors are normally distributed (QQ plot)
+- The errors are not correlated
+- The errors have constant variance (Residuals vs Fitted)
+- The size of the given error does not depend on the values of explanatory variables (Residuals vs Fitted)
 
+The QQ plot shows reasonable fit of the model to the normality assumption because the points in the grapgh are distributed quite evenly along the line.
 
+The "Residuals vs Fitted" grapgh can help see whether the constant variance assumption is true. Any pattern in the scatter plot implies a problem with the assumptions. In this case, the model doesn't seem to have a pattern so the model fit is reasonable.
+
+Leverage measures how much impact a single observation has on the model. "Residuals vs leverage" plot can help identify those observations that have an unsually high impact. In this case, no single obervation stands out (also concidering that the scale is really small) so the model is quite well fitted.
 
 ```{r, echo=FALSE}
 par(mfrow = c(2,2))
@@ -161,7 +170,7 @@ plot(my_model3, which = c(1:2, 5))
 
 ```
 
-
+Even though R-sq wasn't high, the assumptions in the model were confirmed and linear regression seems to be quite a good fit to explain the dependant variable.
 
 
 
