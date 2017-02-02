@@ -55,8 +55,6 @@ str(learning2014)
 
 setwd("C:/Users/Severi/Documents/Open Data/IODS-project")
 
-?write.csv
-
 write.csv(learning2014, file = "learning2014.csv")
 
 read.csv("learning2014.csv")
