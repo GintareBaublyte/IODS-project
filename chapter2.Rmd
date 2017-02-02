@@ -1,10 +1,13 @@
-# Regression and model validation
+# Regression and Model Validation
 
-*Describe the work you have done this week and summarize your learning.*
+This week I learned to wrangle data. Data wrangling are steps that need to be taken in order to process the data into more convenient format for its further analysis. Some of such steps could include combination of similar questions into one variable, scaling of some values back to their original values.
 
-- Describe your work and results clearly. 
-- Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods
-- Assume the reader has no previous knowledge of your data or the more advanced methods you are using  
+After the data was ready to be analysed, I learnt how to analyse the structure of it and how to look deeper into the different variables (see the avarage values, min, max, etc.). Graphical exploration of data is an important part of understanding the information that is in the dataset. It allows to look at the variables in regards to other variables, see the corelations and other information. 
+
+After getting a better picture of the variables that are in the dataset, I learnt how to choose an appropriate regression model to explain one dependant variable with one or multiple independant variables. Different information in the model summaries helps to indentify the best fitting model for the dataset. In addition to that, there is a number of diagnostic plots that can be utilized to explore the validity of model assumptions.
+
+Overall, I learnt useful data analysis basics with R Studio.
+  
 
 ## Data Structure
 
@@ -27,6 +30,7 @@ dim(students2014)
 
 ##Graphical Overview and Summaries of Variables
 
+The grapgh bellow shows how students' attitude increases with higher points received in the exam. It seems that it's quite similar for both genders.
 
 ```{r, echo=FALSE}
 library(ggplot2)
@@ -40,10 +44,6 @@ p4
 ```
 
 
-```{r}
-pairs(students2014[-1], col = students2014$gender)
-
-```
 
 
 The gender variable shows that 110 students are female and 56 are male.
@@ -95,6 +95,7 @@ summary(students2014$points)
 
 ```
 
+The grapgh bellow shows data on different variable pairs.
 
 ```{r, echo=FALSE}
 library(GGally)
@@ -106,9 +107,9 @@ p
 
 ##Regression Model
 
-Now a regresion model will be chosen to explain the dependent variable, which is "points".
+Now a regression model will be chosen to explain the dependent variable, which is "points".
 
-The first regretion model includes 3 variables to explain the dependant variable: 1) attitude, 2) surface learning, and 3) deep learning.
+The first regression model includes 3 variables to explain the dependant variable: 1) attitude, 2) surface learning, and 3) deep learning.
 
 The statistical significance level (p value) for "attitude" is close to 0, which means that this variable is statistically significant in explaining the dependent variable. However, other two variables are statistically insignificant, thus, they need to be replaced.
 
@@ -129,9 +130,6 @@ my_model2 <- lm(points ~ attitude + age + stra, data = students2014)
 summary(my_model2)
 ```
 
-The third regretion model includes 3 variables to explain the dependant variable: 1) attitude, 2) age, and 3) strategic learning.
-
-The statistical significance level (p value) for "attitude" is close to 0, which means that this variable is statistically significant in explaining the dependent variable. However, other two variables are statistically insignificant, thus, they need to be replaced.
 
 After testing a few other variations I have decided to choose linear regresion model with just one explanatory variable "attitude", as only this variable was statistically significant in explaining the dependant variable.
 
@@ -142,7 +140,7 @@ my_model3 <- lm(points ~ attitude, data=students2014)
 summary(my_model3)
 ```
 
-From the summary of the regression model it can be seen that the intercept point is at 11.64, which is the ?? in the model. The ?? is equal to 3.53 and it means that when points increases by 1, attitude increase by 3.53 if everything else remains the same. 
+From the summary of the regression model it can be seen that the intercept point is at 11.64, which is the alpha in the model. The beta is equal to 3.53 and it means that when attitude increases by 1, points increase by 3.53 if everything else remains the same. 
 
 The multiple R-Squared shows how well the chosed regression model fits the data. In this case multiple R-squared is equal to 0.1906 which is really low and would mean that the model doesn't explain the given data well.
 
