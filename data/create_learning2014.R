@@ -54,3 +54,13 @@ learning2014 <- filter(learning2014, points > 0)
 str(learning2014)
 
 setwd("C:/Users/Severi/Documents/Open Data/IODS-project")
+
+?write.csv
+
+write.csv(learning2014, file = "learning2014.csv")
+
+read.csv("learning2014.csv")
+
+str(learning2014)
+
+head(learning2014)
