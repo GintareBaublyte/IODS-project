@@ -1,7 +1,20 @@
-# Insert chapter 2 title here
+# Regression and model validation
 
 *Describe the work you have done this week and summarize your learning.*
 
 - Describe your work and results clearly. 
 - Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods
 - Assume the reader has no previous knowledge of your data or the more advanced methods you are using  
+
+
+
+```{r, echo=FALSE} 
+learning2014 <- read.csv("learning2014.csv")
+
+```
+The dataset that will be analysed shows that there are 166 observations and 8 variables. Gender is recorded by assigning 1 and 2 for "female" and "male" respectively. Age is recorded as the actual age of the respondents. Questions related to attitude, deep learning, strategic learning and surface learning are evaluated in Likert scale (from 1 to 5). Points are the sum of points that students received from every exam question.
+
+```{r, echo=FALSE}
+str(learning2014)
+```
+
