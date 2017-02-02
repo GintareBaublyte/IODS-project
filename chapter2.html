@@ -127,9 +127,8 @@ $(document).ready(function () {
 <li>Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods</li>
 <li>Assume the reader has no previous knowledge of your data or the more advanced methods you are using</li>
 </ul>
-<p>The dataset that will be analysed shows that there are 166 observations and 8 variables. Gender is recorded by assigning 1 and 2 for “female” and “male” respectively. Age is recorded as the actual age of the respondents. Questions related to attitude, deep learning, strategic learning and surface learning are evaluated in Likert scale (from 1 to 5). Points are the sum of points that students got from every exam question.</p>
-<pre><code>## 'data.frame':    166 obs. of  8 variables:
-##  $ X       : int  1 2 3 4 5 6 7 8 9 10 ...
+<p>The dataset that will be analysed shows that there are 166 observations and 7 variables. Gender is recorded by assigning 1 and 2 for “female” and “male” respectively. Age is recorded as the actual age of the respondents. Questions related to attitude, deep learning, strategic learning and surface learning are evaluated in Likert scale (from 1 to 5). Points are the sum of points that students received from every exam question.</p>
+<pre><code>## 'data.frame':    166 obs. of  7 variables:
 ##  $ gender  : Factor w/ 2 levels &quot;F&quot;,&quot;M&quot;: 1 2 1 2 2 1 2 1 2 1 ...
 ##  $ age     : int  53 55 49 53 49 38 50 37 37 42 ...
 ##  $ attitude: num  3.7 3.1 2.5 3.5 3.7 3.8 3.5 2.9 3.8 2.1 ...
@@ -137,6 +136,8 @@ $(document).ready(function () {
 ##  $ stra    : num  3.38 2.75 3.62 3.12 3.62 ...
 ##  $ surf    : num  2.58 3.17 2.25 2.25 2.83 ...
 ##  $ points  : int  25 12 24 10 22 21 21 31 24 26 ...</code></pre>
+<p>The dimensions fuction also shows that there are 166 rows (observations) and 7 columns (variables).</p>
+<pre><code>## [1] 166   7</code></pre>
 </div>
 
 

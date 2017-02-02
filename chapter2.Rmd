@@ -9,12 +9,18 @@
 
 
 ```{r, echo=FALSE} 
-learning2014 <- read.csv("learning2014.csv")
+students2014 <- read.table("learning2014.txt")
 
 ```
-The dataset that will be analysed shows that there are 166 observations and 8 variables. Gender is recorded by assigning 1 and 2 for "female" and "male" respectively. Age is recorded as the actual age of the respondents. Questions related to attitude, deep learning, strategic learning and surface learning are evaluated in Likert scale (from 1 to 5). Points are the sum of points that students received from every exam question.
+The dataset that will be analysed shows that there are 166 observations and 7 variables. Gender is recorded by assigning 1 and 2 for "female" and "male" respectively. Age is recorded as the actual age of the respondents. Questions related to attitude, deep learning, strategic learning and surface learning are evaluated in Likert scale (from 1 to 5). Points are the sum of points that students received from every exam question.
 
 ```{r, echo=FALSE}
-str(learning2014)
+str(students2014)
+```
+
+The dimensions fuction also shows that there are 166 rows (observations) and 7 columns (variables).
+
+```{r, echo=FALSE}
+dim(students2014)
 ```
 
