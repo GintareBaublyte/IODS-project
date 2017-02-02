@@ -142,8 +142,26 @@ my_model3 <- lm(points ~ attitude, data=students2014)
 summary(my_model3)
 ```
 
-##Diagnostic Plots
+From the summary of the regression model it can be seen that the intercept point is at 11.64, which is the ?? in the model. The ?? is equal to 3.53 and it means that when points increases by 1, attitude increase by 3.53 if everything else remains the same. 
 
+The multiple R-Squared shows how well the chosed regression model fits the data. In this case multiple R-squared is equal to 0.1906 which is really low and would mean that the model doesn't explain the given data well.
+
+
+##Diagnostic Plots
 ###Residuals vs Fitted values, Normal QQ-plot and Residuals vs Leverage
+
+
+
+
+```{r, echo=FALSE}
+par(mfrow = c(2,2))
+plot(my_model3, which = c(1:2, 5))
+
+
+
+```
+
+
+
 
 
