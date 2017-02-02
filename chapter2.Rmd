@@ -24,3 +24,67 @@ The dimensions fuction also shows that there are 166 rows (observations) and 7 c
 dim(students2014)
 ```
 
+```{r, echo=FALSE}
+library(ggplot2)
+p1 <- ggplot(students2014, aes(x = attitude, y = points, col = gender))
+p2 <- p1 + geom_point()
+p3 <- p2 + geom_smooth(method = "lm")
+p4 <- p3 + ggtitle("Student's attitude versus exam points")
+p4
+
+
+```
+
+The gender variable shows that 110 students are female and 56 are male.
+
+```{r, echo=FALSE}
+summary(students2014$gender)
+
+```
+
+The average age of the students is 25.51 years old. The youngest respondent is 17 and the oldest 55 y.o. 
+
+```{r, echo=FALSE}
+summary(students2014$age)
+
+```
+
+The avarage value for attitude (which was measured in Likert scale (1-5)) is 3.143. Lowest value is 1.4 and the highest value is 5, which was also the highest possible value to choose from.
+
+```{r, echo=FALSE}
+summary(students2014$attitude)
+
+```
+
+The avarage value assigned to questions related to deep learning was 3.68. The smallest value was 1.583 and the maximum 4.917.
+
+```{r, echo=FALSE}
+summary(students2014$deep)
+
+```
+
+The avarage value of answers to questions related to strategic learning is 3.121. Minimum value is 1.25 and the biggest one 5.
+
+```{r, echo=FALSE}
+summary(students2014$stra)
+
+```
+
+The avarage value of answers to questions related to surface learning is 2.787. Minimum value is 1.583 and the biggest one 4.333.
+
+```{r, echo=FALSE}
+summary(students2014$surf)
+
+```
+
+The avarage total points that students scored in the exam were 22.72. The lowest score was 7 and the highest 33. The middle value (or the median) was 23, which is almost the same as the average.
+
+```{r, echo=FALSE}
+summary(students2014$points)
+
+```
+
+
+
+
+
