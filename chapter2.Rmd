@@ -6,7 +6,7 @@
 - Assume the reader has an introductory course level understanding of writing and reading R code as well as statistical methods
 - Assume the reader has no previous knowledge of your data or the more advanced methods you are using  
 
-
+## Data Structure
 
 ```{r, echo=FALSE} 
 students2014 <- read.table("learning2014.txt")
@@ -24,6 +24,10 @@ The dimensions fuction also shows that there are 166 rows (observations) and 7 c
 dim(students2014)
 ```
 
+
+##Graphical Overview and Summaries of Variables
+
+
 ```{r, echo=FALSE}
 library(ggplot2)
 p1 <- ggplot(students2014, aes(x = attitude, y = points, col = gender))
@@ -34,6 +38,13 @@ p4
 
 
 ```
+
+
+```{r}
+pairs(students2014[-1], col = students2014$gender)
+
+```
+
 
 The gender variable shows that 110 students are female and 56 are male.
 
@@ -85,6 +96,54 @@ summary(students2014$points)
 ```
 
 
+```{r, echo=FALSE}
+library(GGally)
+library(ggplot2)
+p <- ggpairs(students2014, mapping = aes(col = gender, alpha = 0.3), lower = list(combo = wrap("facethist", bins = 20)))
+p
 
+```
+
+##Regression Model
+
+Now a regresion model will be chosen to explain the dependent variable, which is "points".
+
+The first regretion model includes 3 variables to explain the dependant variable: 1) attitude, 2) surface learning, and 3) deep learning.
+
+The statistical significance level (p value) for "attitude" is close to 0, which means that this variable is statistically significant in explaining the dependent variable. However, other two variables are statistically insignificant, thus, they need to be replaced.
+
+```{r, echo=FALSE}
+my_model <- lm(points ~ attitude + surf + deep, data = students2014)
+
+summary(my_model)
+```
+
+The second regretion model includes 3 variables to explain the dependant variable: 1) attitude, 2) age, and 3) strategic learning.
+
+The statistical significance level (p value) for "attitude" is close to 0, which means that this variable is statistically significant in explaining the dependent variable. However, other two variables are statistically insignificant (their values are more than 0.05), thus, they need to be replaced.
+
+
+```{r, echo=FALSE}
+my_model2 <- lm(points ~ attitude + age + stra, data = students2014)
+
+summary(my_model2)
+```
+
+The third regretion model includes 3 variables to explain the dependant variable: 1) attitude, 2) age, and 3) strategic learning.
+
+The statistical significance level (p value) for "attitude" is close to 0, which means that this variable is statistically significant in explaining the dependent variable. However, other two variables are statistically insignificant, thus, they need to be replaced.
+
+After testing a few other variations I have decided to choose linear regresion model with just one explanatory variable "attitude", as only this variable was statistically significant in explaining the dependant variable.
+
+
+```{r, echo=FALSE}
+my_model3 <- lm(points ~ attitude, data=students2014)
+
+summary(my_model3)
+```
+
+##Diagnostic Plots
+
+###Residuals vs Fitted values, Normal QQ-plot and Residuals vs Leverage
 
 
