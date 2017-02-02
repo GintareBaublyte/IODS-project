@@ -52,3 +52,5 @@ colnames(learning2014)
 learning2014 <- filter(learning2014, points > 0)
 
 str(learning2014)
+
+setwd("C:/Users/Severi/Documents/Open Data/IODS-project")
