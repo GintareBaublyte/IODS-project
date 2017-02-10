@@ -22,7 +22,7 @@ str(alc)
 
 I will analyse the relationships between alcohol consumption and 4 of the following variables:  
 1. weekly study time (*studytime*)  
-2. romantic relationship status (*romantic*)  
+2. free time after school (*freetime*)  
 3. quality of family relationships (*famrel*)  
 4. age (*age*)  
 
@@ -30,7 +30,7 @@ I will analyse the relationships between alcohol consumption and 4 of the follow
 
 Four hypothesis related to the alcohol consumption and the chosen variables:  
 **H1**: Students who study longer during the week, consume less alcohol compared to those who study less.  
-**H2**: Those in a romantic relationship consume less alcohol compared to those who are not in a romantic relationship.  
+**H2**: Those students who have more free time after school consume higher amounts of alcohol than those who have less free time.  
 **H3**: Those who have better family relationships consume less alcohol than those in poor family relationships.  
 **H4**: Younger students consume more alcohol than older students.  
 
@@ -90,42 +90,27 @@ barplot(counts_studytime, main="Study time vs high use",
   
 ###Second Hypothesis  
   
-The relationship between alcohol consumption and relationship status will be analysed. 
+The relationship between alcohol consumption and amount of free time after school will be analysed. 
   
-In the survey students had to choose wheather they are in a romantic relationship (YES) or they aren't (NO).  
+In the survey students had to choose how much free time after school they have. The possible answers ranged from 1 - very low to 5 - very high.  
   
-We can see that more than 2 times more students are not in a romantic relationship.
+We can see from the summary below that on average students chose answer 3, which is average amount of free time after school. However, all answers in the range were selected. 
 
 ```{r, echo=TRUE} 
-summary(alc$romantic)
+summary(alc$freetime)
 
 ```
 
-Frequencies table shows that overall students use less alcohol independent on their relationship status.  
+The box plot indicates that 50% of students who consume high amounts of alcohol and 50% of students who don't had the same amount of free time (from average to high).  
 
-```{r, echo=TRUE}
-table_romantic <- xtabs(~high_use+romantic, data=alc)
-ftable(table_romantic)
-```
-The proportions are as follows:  
-`r 180/(180+81)*100`% of students who aren't in a romantic relationship consume low amounts of alcohol, while the rest consumes high amounts.
-`r 88/(88+33)*100`% of students who are in a romantic relationship consume low amounts of alcohol, while the rest of those students consume high amounts.  
-
-This shows that higher proportion of students who are in a relationship status also do not drink high amounts of alcohol compared to those who are single.
-
-The grapgh below also shows that there are significantly more people that aren't in a romantic relationship, but the proportions of those who consume alcohol on a high level are quite close for both relationship status. 
-
-```{r, echo=TRUE}
-counts_romantic <- table(alc$high_use, alc$romantic)
-barplot(counts_romantic, main="Relationship status vs high use",
-  xlab="Relationship status", col=c("darkblue","red"),
- 	legend = rownames(counts_romantic))
+```{r, echo=TRUE} 
+g4 <- ggplot(alc, aes(x = high_use, y= freetime))
+g4 + geom_boxplot(aes()) + xlab("High alcohol consuption") + ylab("Free time after school") + ggtitle("Students' free time after school by alcohol consumption")
 ```
 
+**H2**: Those students who have more free time after school consume higher amounts of alcohol than those who have less free time.  
 
-**H2**: Those in a romantic relationship consume less alcohol compared to those who are not in a romantic relationship.
-
-**H2 is confirmed.**  
+**H2 is declined**  
 
 
 ###Third hypothesis  
@@ -187,3 +172,80 @@ g3 + geom_boxplot(aes()) + xlab("High alcohol consuption") + ylab("Age") + ggtit
 
 **H4 is declined.**  
 
+##Logistic regression model  
+
+A logistic regression will be used to statistically explore the four variables (*studytime, freetime, famrel, age*) and their relationship with the high/low alcohol consumption variable as the target variable.  
+  
+**The summary of the logistic regression model**  
+1. The standard error shows how much, on average, the estimates would bounce around if the study were re-run indentically, but with new data, over and over.  
+2. When the estimate is devided by the standard error, the z value is calculated, which is assumed to be normally distributed.  
+3. Pr(>|z|) is the two-tailed p-values that correspond to those z-values in a standard normal distribution.  
+4. The significance stars indicate wheather the variables are significant or not. In this case all the variables are statistically significant.  
+5. Information about the model and its gooness of fit is in the bottom. The Residual deviance is a measure of the lack of fit of the model taken as a whole, whereas the  Null deviance is such a measure for a reduced model that only includes the intercept.  
+6. The null deviance is a model which only contains the intercept. Residual deviance includes the covariants that were chosen and it tests how plausible it is that we would see the data if the model had 377 degrees of freedom. It is comparing the null model (with just the intercept) and checking wheather it's adequate to it. For the the critical value needs to be calculated, which is the chi sq that equals to 423.2743. Since 423 is more than 430, we do reject the null hypothesis and that means that the model is inadequate relative to the null model. In other words it's not better than the null model.  
+
+
+
+```{r, echo=TRUE}
+m <- glm(high_use ~ studytime + freetime + famrel + age, data = alc, family = "binomial")
+
+summary(m)
+
+#chi sq
+qchisq(0.95, 377)
+```
+
+The coeficients here mean that:  
+If the value of studytime increases by one the model predicts that the log of the odds decreases by 0.55.  
+If the value of freetime increases by one the model predicts that the log of the odds increases by 0.35.  
+If the value of famrel increases by one the model predicts that the log of the odds decreases by 0.33.  
+If the value of age increases by one the model predicts that the log of the odds increases by 0.24.  
+
+
+```{r, echo=TRUE}
+coef(m)
+```
+
+Odds ratios for freetime and age are higher than one thus it means they are positivelly associated with high use of alcohol.  
+Whereas odd rations for studytime and famrel are lower than 1 so they can't be positivelly associated with higher alcohol consumption.
+
+
+```{r, echo=TRUE}
+OR <- coef(m) %>% exp
+CI <- confint(m) %>% exp
+cbind(OR, CI)
+```
+
+##Predictive Power of the Model  
+  
+The prediction of high_use being false has a probability of 0.7, while for it beinf true is 0.3.
+
+```{r, echo=TRUE}
+probabilities <- predict(m, type = "response")
+alc <- mutate(alc, probability = probabilities)
+alc <- mutate(alc, prediction = probability > 0.5)
+table(high_use = alc$high_use, prediction = alc$prediction)
+```
+```{r, echo=TRUE}
+gprob <- ggplot(alc, aes(x = probability, y = high_use, col = prediction))
+gprob + geom_point()
+table(high_use = alc$high_use, prediction = alc$prediction) %>% prop.table() %>% addmargins()
+```
+
+The average number of wrong predictions in the (training) data is 0.31.
+
+```{r, echo=TRUE}
+loss_func <- function(class, prob) {
+  n_wrong <- abs(class - prob) > 0.5
+  mean(n_wrong)
+}
+loss_func(class = alc$high_use, prob = alc$probability)
+```
+
+The 10-fold cross-validation on the model has a higher prediction error compared to DataCamp exercise.  
+
+```{r, echo=TRUE}
+library(boot)
+cv <- cv.glm(data = alc, cost = loss_func, glmfit = m, K = 10)
+cv$delta[1]
+```
