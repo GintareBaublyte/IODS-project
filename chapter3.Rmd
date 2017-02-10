@@ -1,2 +1,97 @@
 #Logistic Regression
 
+##The Data
+
+*The dataset is imported.*
+```{r, echo=TRUE} 
+alc <- read.table("alc.txt", header = T, sep = ";")
+
+```
+There are **35** variables in the dataset with **382** observations in total. Among the variables there is some basic demographic data (e.g. sex, age, family size, etc.), some variables are related to school, some to personal life and relationships. G1, G2 and G3 are grades for the first period, second period and final grade accordingly.  
+  
+The variables called *alc_use* shows the average weekly alcohol consumption while the variable *high_use* indicated average weekly alcohol consumption higher than 2.
+
+
+```{r, echo=TRUE} 
+colnames(alc)
+
+str(alc)
+
+
+```
+
+I will analyse the relationships between alcohol consumption and 4 of the following variables:  
+1. weekly study time (*studytime*)  
+2. romantic relationship status (*romantic*)  
+3. quality of family relationships (*famrel*)  
+4. age (*age*)  
+
+##Testing hypothesis  
+
+Four hypothesis related to the alcohol consumption and the chosen variables:  
+**H1**: Students who study longer during the week, consume less alcohol compared to those who study less.  
+**H2**: Those in a romantic relationship consume less alcohol compared to those who are not in a romantic relationship.  
+**H3**: Those who have excellent family relationships consume less alcohol than those in poor family relationships.  
+**H4**: Younger students consume more alcohol than older students.  
+
+
+```{r, echo=FALSE} 
+library(ggplot2)
+library(dplyr)
+
+```
+###First hypothesis  
+
+
+```{r, echo=TRUE} 
+g1 <- ggplot(alc, aes(x = high_use, y= studytime))
+g1 + geom_boxplot(aes()) + xlab("High alcohol consuption") + ylab("Weekly study time") + ggtitle("Student weekly study time by alcohol consumption")
+
+```
+
+
+```{r, echo=TRUE} 
+g2 <- ggplot(alc, aes(x = high_use, y= famrel))
+g2 + geom_boxplot(aes()) + xlab("High alcohol consuption") + ylab("Quality of family relationship") + ggtitle("Student quality of family relationship by alcohol consumption")
+
+```
+
+```{r, echo=TRUE} 
+g3 <- ggplot(alc, aes(x = high_use, y= freetime))
+g3 + geom_boxplot(aes()) + xlab("High alcohol consuption") + ylab("Free time after school") + ggtitle("Student free time after school by alcohol consumption")
+
+```
+
+
+```{r, echo=TRUE}
+mytable <- xtabs(~high_use+romantic, data=alc)
+ftable(mytable)
+```
+
+```{r, echo=TRUE}
+counts <- table(alc$high_use, alc$romantic)
+barplot(counts, main="Romantic vs high use",
+  xlab="Relationship status", col=c("darkblue","red"),
+ 	legend = rownames(counts))
+```
+
+```{r, echo=TRUE}
+counts2 <- table(alc$high_use, alc$freetime)
+barplot(counts2, main="Free time vs high use",
+  xlab="Free time", col=c("darkblue","red"),
+ 	legend = rownames(counts))
+```
+
+```{r, echo=TRUE}
+counts3 <- table(alc$high_use, alc$freetime)
+barplot(counts3, main="Free time vs high use",
+  xlab="free time", col=c("darkblue","red"),
+ 	legend = rownames(counts3), beside=TRUE)
+```
+
+
+```{r, echo=TRUE}
+
+
+
+```

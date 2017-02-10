@@ -3,6 +3,7 @@
 #The data is on student alcohol consumption (https://archive.ics.uci.edu/ml/datasets/STUDENT+ALCOHOL+CONSUMPTION)
 
 #read datafiles into R
+setwd("C:/Users/Severi/Documents/Open Data/IODS-project/data")
 math <- read.csv(file = "student-mat.csv", header = TRUE, sep = ";")
 por <- read.csv(file = "student-por.csv", header = TRUE, sep = ";")
 
@@ -63,6 +64,9 @@ glimpse(alc)
 
 #save the joined and modified dataset
 
-setwd("C:/Users/Severi/Documents/Open Data/IODS-project")
+setwd("C:/Users/Severi/Documents/Open Data/IODS-project/data")
 
-write.csv(alc, file = "alcohol.csv", row.names = F)
+write.table(alc, file = "alc.txt", sep = ";")
+
+#check that it works
+read.table("alc.txt", header = T, sep = ";")
