@@ -35,12 +35,32 @@ Four hypothesis related to the alcohol consumption and the chosen variables:
 **H4**: Younger students consume more alcohol than older students.  
 
 
-```{r, echo=FALSE} 
+```{r} 
 library(ggplot2)
 library(dplyr)
 
 ```
 ###First hypothesis  
+
+The relationship between alcohol consumption and weekly study time will be analysed.  
+  
+In the survey students had to choose how many hours a week they study. The options were:  
+1 - less than 2 hours  
+2 - from 2 to 5 hours  
+3 - from 5 to 10 hours  
+4 - more than 10 hours  
+  
+Here we see that on average students study from 2 to 5 hours, because the mean of the answers is around 2 which is attributed to 2-10 hours as explained above. In addition to that, all the answers were ranging from 1 and 4.
+
+
+```{r, echo=TRUE} 
+summary(alc$studytime)
+
+```
+
+To visualize the data a boxplot will be drawn.  
+  
+This grapgh shows that 50% of students who do not consume high amounts of alcohol study from 2 to 10 hours a week. 50% of students who consume high amounts of alcohol study less than 2 hours a week.
 
 
 ```{r, echo=TRUE} 
@@ -48,6 +68,73 @@ g1 <- ggplot(alc, aes(x = high_use, y= studytime))
 g1 + geom_boxplot(aes()) + xlab("High alcohol consuption") + ylab("Weekly study time") + ggtitle("Student weekly study time by alcohol consumption")
 
 ```
+
+The table below shows the frequencies. It is clear that most of the students (195) study from 2 to 5 hours a week, while least students study more than 10 hours. Additionally, overall most students do not consume high amounts of alcohol weekly irrespectivelly of how much they study. However, it is obvious that students that study less than 2 hours a week have a higher proportion of students that consume more alcohol compared to all the other students. 
+
+```{r, echo=TRUE}
+table_studytime <- xtabs(~high_use+studytime, data=alc)
+ftable(table_studytime)
+```
+Similar results are visible in the grapgh below.
+
+```{r, echo=TRUE}
+counts_studytime <- table(alc$high_use, alc$studytime)
+barplot(counts_studytime, main="Study time vs high use",
+  xlab="Study time", col=c("darkblue","red"),
+ 	legend = rownames(counts_studytime), beside=TRUE)
+```
+
+**H1**: Students who study longer during the week, consume less alcohol compared to those who study less. 
+
+**H1 is confimed.**  
+  
+###Second Hypothesis  
+  
+The relationship between alcohol consumption and relationship status will be analysed. 
+  
+In the survey students had to choose wheather they are in a romantic relationship (YES) or they aren't (NO).  
+  
+We can see that more than 2 times more students are not in a romantic relationship.
+
+```{r, echo=TRUE} 
+summary(alc$romantic)
+
+```
+
+
+
+
+
+```{r, echo=TRUE}
+mytable <- xtabs(~high_use+romantic, data=alc)
+ftable(mytable)
+```
+
+```{r, echo=TRUE}
+counts <- table(alc$high_use, alc$romantic)
+barplot(counts, main="Romantic vs high use",
+  xlab="Relationship status", col=c("darkblue","red"),
+ 	legend = rownames(counts))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ```{r, echo=TRUE} 
