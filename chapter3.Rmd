@@ -31,7 +31,7 @@ I will analyse the relationships between alcohol consumption and 4 of the follow
 Four hypothesis related to the alcohol consumption and the chosen variables:  
 **H1**: Students who study longer during the week, consume less alcohol compared to those who study less.  
 **H2**: Those in a romantic relationship consume less alcohol compared to those who are not in a romantic relationship.  
-**H3**: Those who have excellent family relationships consume less alcohol than those in poor family relationships.  
+**H3**: Those who have better family relationships consume less alcohol than those in poor family relationships.  
 **H4**: Younger students consume more alcohol than older students.  
 
 
@@ -101,40 +101,54 @@ summary(alc$romantic)
 
 ```
 
-
-
-
+Frequencies table shows that overall students use less alcohol independent on their relationship status.  
 
 ```{r, echo=TRUE}
-mytable <- xtabs(~high_use+romantic, data=alc)
-ftable(mytable)
+table_romantic <- xtabs(~high_use+romantic, data=alc)
+ftable(table_romantic)
 ```
+The proportions are as follows:  
+`r 180/(180+81)*100`% of students who aren't in a romantic relationship consume low amounts of alcohol, while the rest consumes high amounts.
+`r 88/(88+33)*100`% of students who are in a romantic relationship consume low amounts of alcohol, while the rest of those students consume high amounts.  
+
+This shows that higher proportion of students who are in a relationship status also do not drink high amounts of alcohol compared to those who are single.
+
+The grapgh below also shows that there are significantly more people that aren't in a romantic relationship, but the proportions of those who consume alcohol on a high level are quite close for both relationship status. 
 
 ```{r, echo=TRUE}
-counts <- table(alc$high_use, alc$romantic)
-barplot(counts, main="Romantic vs high use",
+counts_romantic <- table(alc$high_use, alc$romantic)
+barplot(counts_romantic, main="Relationship status vs high use",
   xlab="Relationship status", col=c("darkblue","red"),
- 	legend = rownames(counts))
+ 	legend = rownames(counts_romantic))
 ```
 
 
+**H2**: Those in a romantic relationship consume less alcohol compared to those who are not in a romantic relationship.
+
+**H2 is confirmed.**  
 
 
+###Third hypothesis  
+  
+The relationship between alcohol consumption and quality of their family relationship will be analysed.  
 
+In the survey students had to choose wheather what is the quality of their family relationship. The possible answer options ranged from 1 - very bad to 5 - excellent.  
+  
+On average students indicated that their relationship with the family are good (3.937), however, the whole range of answers was used in answering this question.
 
+```{r, echo=TRUE} 
+summary(alc$famrel)
 
+```
 
+Frequencies table also shows that most of the students are in a good relationship with their family. Only 8 students indicated that the relationship was very poor.   
 
+```{r, echo=TRUE}
+table_famrel <- xtabs(~high_use+famrel, data=alc)
+ftable(table_famrel)
+```
 
-
-
-
-
-
-
-
-
-
+The box plot shows that 50% of students who do not consume high amounts of alcohol have good or excellent relationships with their family, whereas, 50% of students who consume high amounts of alcohol have average or good relationships. Another interesting thing is that among the students who do not consume high amounts of alcohol the answers ranged from average to excellent, which outliers for 2 other options. In contast, the answers among the students who consume high amounts of alcohol, the answers ranged from poor to excellent, with an outlier in very poor. Thus, it can be stated that overall students who do not consume high amounts of alcohol are more in better relationships with their families.
 
 
 ```{r, echo=TRUE} 
@@ -143,42 +157,33 @@ g2 + geom_boxplot(aes()) + xlab("High alcohol consuption") + ylab("Quality of fa
 
 ```
 
+**H3**: Those who have better family relationships consume less alcohol than those in poor family relationships.
+
+**H3 is confirmed.**  
+
+###Fourth hypothesis  
+  
+The relationship between students' alcohol consumption and their age will be analysed.  
+  
+In the survey students had to indicate their actual age.  
+  
+The students' age ranged from 15 to 22 with average age of around 17.
+
 ```{r, echo=TRUE} 
-g3 <- ggplot(alc, aes(x = high_use, y= freetime))
-g3 + geom_boxplot(aes()) + xlab("High alcohol consuption") + ylab("Free time after school") + ggtitle("Student free time after school by alcohol consumption")
+summary(alc$age)
 
 ```
 
+The boxplot shows that 50% of students who do not consume high amounts of alcohol are between the age of 16 and 17, while 50% of students who consume higher amounts of alcohol are between the ages of 16 and 18 and their overall answer range is wider.  
 
 ```{r, echo=TRUE}
-mytable <- xtabs(~high_use+romantic, data=alc)
-ftable(mytable)
-```
-
-```{r, echo=TRUE}
-counts <- table(alc$high_use, alc$romantic)
-barplot(counts, main="Romantic vs high use",
-  xlab="Relationship status", col=c("darkblue","red"),
- 	legend = rownames(counts))
-```
-
-```{r, echo=TRUE}
-counts2 <- table(alc$high_use, alc$freetime)
-barplot(counts2, main="Free time vs high use",
-  xlab="Free time", col=c("darkblue","red"),
- 	legend = rownames(counts))
-```
-
-```{r, echo=TRUE}
-counts3 <- table(alc$high_use, alc$freetime)
-barplot(counts3, main="Free time vs high use",
-  xlab="free time", col=c("darkblue","red"),
- 	legend = rownames(counts3), beside=TRUE)
-```
-
-
-```{r, echo=TRUE}
-
-
+g3 <- ggplot(alc, aes(x = high_use, y= age))
+g3 + geom_boxplot(aes()) + xlab("High alcohol consuption") + ylab("Age") + ggtitle("Students' age by alcohol consumption")
 
 ```
+
+
+**H4**: Younger students consume more alcohol than older students.
+
+**H4 is declined.**  
+
