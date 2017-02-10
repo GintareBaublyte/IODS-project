@@ -63,4 +63,6 @@ glimpse(alc)
 
 #save the joined and modified dataset
 
+setwd("C:/Users/Severi/Documents/Open Data/IODS-project")
+
 write.table(alc, file = "alcohol.txt")
