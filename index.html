@@ -467,8 +467,7 @@ g3 + geom_boxplot(aes()) + xlab(&quot;High alcohol consuption&quot;) + ylab(&quo
 2. When the estimate is devided by the standard error, the z value is calculated, which is assumed to be normally distributed.<br />
 3. Pr(&gt;|z|) is the two-tailed p-values that correspond to those z-values in a standard normal distribution.<br />
 4. The significance stars indicate wheather the variables are significant or not. In this case all the variables are statistically significant.<br />
-5. Information about the model and its gooness of fit is in the bottom. The Residual deviance is a measure of the lack of fit of the model taken as a whole, whereas the Null deviance is such a measure for a reduced model that only includes the intercept.<br />
-6. The null deviance is a model which only contains the intercept. Residual deviance includes the covariants that were chosen and it tests how plausible it is that we would see the data if the model had 377 degrees of freedom. It is comparing the null model (with just the intercept) and checking wheather it’s adequate to it. For the the critical value needs to be calculated, which is the chi sq that equals to 423.2743. Since 423 is more than 430, we do reject the null hypothesis and that means that the model is inadequate relative to the null model. In other words it’s not better than the null model.</p>
+5. The null deviance is a model which only contains the intercept. Residual deviance includes the covariants that were chosen and it tests how plausible it is that we would see the data if the model had 377 degrees of freedom. It is comparing the null model (with just the intercept) and checking wheather it’s adequate to it. For that the critical value needs to be calculated, which is the chi sq that equals to 423.2743. Since 423 is less than 430, we do reject the null hypothesis and that means that the model is inadequate relative to the null model. In other words it’s not better than the null model.</p>
 <pre class="r"><code>m &lt;- glm(high_use ~ studytime + freetime + famrel + age, data = alc, family = &quot;binomial&quot;)
 
 summary(m)</code></pre>
@@ -524,7 +523,7 @@ CI &lt;- confint(m) %&gt;% exp</code></pre>
 </div>
 <div id="predictive-power-of-the-model" class="section level2">
 <h2>Predictive Power of the Model</h2>
-<p>The prediction of high_use being false has a probability of 0.7, while for it beinf true is 0.3.</p>
+<p>The prediction of high_use being false has a probability of 0.7, while for it being true is 0.3.</p>
 <pre class="r"><code>probabilities &lt;- predict(m, type = &quot;response&quot;)
 alc &lt;- mutate(alc, probability = probabilities)
 alc &lt;- mutate(alc, prediction = probability &gt; 0.5)
@@ -553,7 +552,7 @@ loss_func(class = alc$high_use, prob = alc$probability)</code></pre>
 <pre class="r"><code>library(boot)
 cv &lt;- cv.glm(data = alc, cost = loss_func, glmfit = m, K = 10)
 cv$delta[1]</code></pre>
-<pre><code>## [1] 0.3089005</code></pre>
+<pre><code>## [1] 0.3141361</code></pre>
 </div>
 </div>
 

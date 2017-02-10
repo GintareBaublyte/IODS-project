@@ -181,8 +181,7 @@ A logistic regression will be used to statistically explore the four variables (
 2. When the estimate is devided by the standard error, the z value is calculated, which is assumed to be normally distributed.  
 3. Pr(>|z|) is the two-tailed p-values that correspond to those z-values in a standard normal distribution.  
 4. The significance stars indicate wheather the variables are significant or not. In this case all the variables are statistically significant.  
-5. Information about the model and its gooness of fit is in the bottom. The Residual deviance is a measure of the lack of fit of the model taken as a whole, whereas the  Null deviance is such a measure for a reduced model that only includes the intercept.  
-6. The null deviance is a model which only contains the intercept. Residual deviance includes the covariants that were chosen and it tests how plausible it is that we would see the data if the model had 377 degrees of freedom. It is comparing the null model (with just the intercept) and checking wheather it's adequate to it. For the the critical value needs to be calculated, which is the chi sq that equals to 423.2743. Since 423 is more than 430, we do reject the null hypothesis and that means that the model is inadequate relative to the null model. In other words it's not better than the null model.  
+5. The null deviance is a model which only contains the intercept. Residual deviance includes the covariants that were chosen and it tests how plausible it is that we would see the data if the model had 377 degrees of freedom. It is comparing the null model (with just the intercept) and checking wheather it's adequate to it. For that the critical value needs to be calculated, which is the chi sq that equals to 423.2743. Since 423 is less than 430, we do reject the null hypothesis and that means that the model is inadequate relative to the null model. In other words it's not better than the null model.  
 
 
 
@@ -218,7 +217,7 @@ cbind(OR, CI)
 
 ##Predictive Power of the Model  
   
-The prediction of high_use being false has a probability of 0.7, while for it beinf true is 0.3.
+The prediction of high_use being false has a probability of 0.7, while for it being true is 0.3.
 
 ```{r, echo=TRUE}
 probabilities <- predict(m, type = "response")
