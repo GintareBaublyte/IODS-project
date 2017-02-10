@@ -63,6 +63,6 @@ glimpse(alc)
 
 #save the joined and modified dataset
 
-setwd("C:/Users/Severi/Documents/Open Data/IODS-project")
+setwd("C:/Users/Severi/Documents/Open Data/IODS-project/data")
 
-write.table(alc, file = "alcohol.txt")
+write.csv(alc, file = "alcohol.csv")
