@@ -1,8 +1,14 @@
+---
+output:
+  html_document:
+    code_folding: hide
+---
+
 #Clustering and Classification
 
 ##The Data
 
-```{r}
+```{r, message=FALSE}
 library(MASS)
 library(dplyr)
 library('corrplot')
@@ -84,12 +90,28 @@ correct_classes <- test$crime
 test <- dplyr::select(test, -crime)
 
 ```
+Now the linear discriminant analysis (LDA) will be fitten on the train set. The new categorical crime rate will be the target variable and all the other variables in the dataset will be used as predictor variables.
+
+```{r}
+lda.fit <- lda(crime ~ ., data = train)
+lda.fit
+lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0.75, choices = c(1,2)){
+  heads <- coef(x)
+  arrows(x0 = 0, y0 = 0, 
+         x1 = myscale * heads[,choices[1]], 
+         y1 = myscale * heads[,choices[2]], col=color, length = arrow_heads)
+  text(myscale * heads[,choices], labels = row.names(heads), 
+       cex = tex, col=color, pos=3)
+}
+classes <- as.numeric(train$crime)
+plot(lda.fit, dimen = 2, col = classes, pch = classes)
+lda.arrows(lda.fit, myscale = 1)
+```
 
 
 
 
 
 
-Fit the linear discriminant analysis on the train set. Use the categorical crime rate as the target variable and all the other variables in the dataset as predictor variables. Draw the LDA (bi)plot. (3 points)
 Save the crime categories from the test set and then remove the categorical crime variable from the test dataset. Then predict the classes with the LDA model on the test data. Cross tabulate the results with the crime categories from the test set. Comment on the results. (3 points)
 Reload the Boston dataset and standardize the dataset (we did not do this in the Datacamp exercises, but you should scale the variables to get comparable distances). Calculate the distances between the observations. Run k-means algorithm on the dataset. Investigate what is the optimal number of clusters and run the algorithm again. Visualize the clusters (for example with the pairs() or ggpairs() functions, where the clusters are separated with colors) and interpret the results. (4 points)
