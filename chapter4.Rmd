@@ -86,8 +86,6 @@ n <- nrow(boston_scaled)
 ind <- sample(n,  size = n * 0.8)
 train <- boston_scaled[ind,]
 test <- boston_scaled[-ind,]
-correct_classes <- test$crime
-test <- dplyr::select(test, -crime)
 
 ```
 Now the linear discriminant analysis (LDA) will be fitten on the train set. The new categorical crime rate will be the target variable and all the other variables in the dataset will be used as predictor variables.
@@ -105,9 +103,15 @@ lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0
 }
 classes <- as.numeric(train$crime)
 plot(lda.fit, dimen = 2, col = classes, pch = classes)
-lda.arrows(lda.fit, myscale = 1)
+lda.arrows(lda.fit, myscale = 2)
 ```
 
+The crime categories from the test set will be saved and the categorical crime variable will be removed from the dataset. This will allow us to predict the classes with the LDA model on the test data.
+
+```{r}
+correct_classes <- test$crime
+test <- dplyr::select(test, -crime)
+```
 
 
 
