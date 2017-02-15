@@ -1,0 +1,51 @@
+#Clustering and Classification
+
+##The Data
+
+```{r}
+library(MASS)
+library(dplyr)
+library('corrplot')
+data("Boston")
+```
+The data used in this chapter describes housing Values in Suburbs of Boston. It has 506 observations and 14 variables.
+
+```{r}
+dim(Boston)
+```
+The variables are listed below. Variable *crim* is per capita crime rate by town, while *ptration* is pupil-teacher ratio by town. Other variables are briefly described here: https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/Boston.html
+
+```{r}
+str(Boston)
+```
+
+From the Pairs matrix it can be seen that some of the variables are strongly correlated between each other, e.g. variables *nox* and *dis* or *lstat* and *medv*. Only a few variables seem to have normal distribution.
+
+```{r}
+pairs(Boston, main = "Pairs matrix", upper.panel = NULL)
+```
+
+To understand the correlations between variables better it is useful to look at the correlation matrix. As mentioned earlier, variables *nox* and *dis* or *lstat* and *medv* have strong correlations (negative) of -0.75 and -0.74 respectively. The strongest correlation seems to be between *rad* and *tax* (0.91). There are other variables with high correlations. They can be seen from the matrix as biggest circles either in red or in blue.
+
+```{r}
+cor_matrix<-cor(Boston) %>% round(digits = 2)
+corrplot.mixed(cor_matrix)
+```
+
+The summaries bellow show smallest, highes and mean values of the variables, in addition to 1st and 3rd quartilles and median values. It can be seen that the variable data is using very different scales.
+
+```{r}
+summary(Boston)
+```
+
+
+
+
+
+
+
+
+Standardize the dataset and print out summaries of the scaled data. How did the variables change? Create a categorical variable of the crime rate in the Boston dataset (from the scaled crime rate). Use the quantiles as the break points in the categorical variable. Drop the old crime rate variable from the dataset. Divide the dataset to train and test sets, so that 80% of the data belongs to the train set. (2 points)
+Fit the linear discriminant analysis on the train set. Use the categorical crime rate as the target variable and all the other variables in the dataset as predictor variables. Draw the LDA (bi)plot. (3 points)
+Save the crime categories from the test set and then remove the categorical crime variable from the test dataset. Then predict the classes with the LDA model on the test data. Cross tabulate the results with the crime categories from the test set. Comment on the results. (3 points)
+Reload the Boston dataset and standardize the dataset (we did not do this in the Datacamp exercises, but you should scale the variables to get comparable distances). Calculate the distances between the observations. Run k-means algorithm on the dataset. Investigate what is the optimal number of clusters and run the algorithm again. Visualize the clusters (for example with the pairs() or ggpairs() functions, where the clusters are separated with colors) and interpret the results. (4 points)
