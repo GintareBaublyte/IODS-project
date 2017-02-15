@@ -18,6 +18,7 @@ The variables are listed below. Variable *crim* is per capita crime rate by town
 ```{r}
 str(Boston)
 ```
+##Correlation
 
 From the Pairs matrix it can be seen that some of the variables are strongly correlated between each other, e.g. variables *nox* and *dis* or *lstat* and *medv*. Only a few variables seem to have normal distribution.
 
@@ -38,14 +39,57 @@ The summaries bellow show smallest, highes and mean values of the variables, in 
 summary(Boston)
 ```
 
+##Scaling of data
+
+Since the range of values in the data is quite different and broad, it should be scaled, in order to be able to compare the data and make sure that all the variables contribute proportionally.  
+
+```{r}
+boston_scaled <- scale(Boston)
+summary(boston_scaled)
+boston_scaled <- as.data.frame(boston_scaled)
+```
+
+Now that the data is scaled, the ranges look similar. Note that the means are all zero.
+
+##Categorical variable
+
+It is possible to create a categorical variable from a continuous one. This will be done with *crim* (per vapita crime rate by town) variable. *crim* will be the so-called **factor variable**. It will be cut by quantiles to get the **high**, **low** and **middle** rates of crime into their categories.
+
+```{r}
+scaled_crim <- c(boston_scaled$crim)
+summary(scaled_crim)
+bins <- quantile(scaled_crim)
+crime <- cut(scaled_crim, breaks = bins, include.lowest = TRUE, label = c("low", "med_low", "med_high", "high"))
+table(crime)
+```
+We can see that now *crime* data has been split into 4 categories. The original *crim* variable will be removed from the dataset and the new one *crime* will be added instead.
+
+```{r}
+boston_scaled <- dplyr::select(boston_scaled, -crim)
+boston_scaled <- data.frame(boston_scaled, crime)
+```
+
+##Dividing of data and LDA
+
+When using statistical methos to predict something, it is important to split the data to train and test sets and see how the model works (well or poorly). The train set is used to train the model and the test set is used to make predictions on data. 
+
+The data will be divided to these two sets, so that 80% of it would belong to the train set:
+
+```{r}
+n <- nrow(boston_scaled)
+ind <- sample(n,  size = n * 0.8)
+train <- boston_scaled[ind,]
+test <- boston_scaled[-ind,]
+correct_classes <- test$crime
+test <- dplyr::select(test, -crime)
+
+```
 
 
 
 
 
 
-
-Standardize the dataset and print out summaries of the scaled data. How did the variables change? Create a categorical variable of the crime rate in the Boston dataset (from the scaled crime rate). Use the quantiles as the break points in the categorical variable. Drop the old crime rate variable from the dataset. Divide the dataset to train and test sets, so that 80% of the data belongs to the train set. (2 points)
 Fit the linear discriminant analysis on the train set. Use the categorical crime rate as the target variable and all the other variables in the dataset as predictor variables. Draw the LDA (bi)plot. (3 points)
 Save the crime categories from the test set and then remove the categorical crime variable from the test dataset. Then predict the classes with the LDA model on the test data. Cross tabulate the results with the crime categories from the test set. Comment on the results. (3 points)
 Reload the Boston dataset and standardize the dataset (we did not do this in the Datacamp exercises, but you should scale the variables to get comparable distances). Calculate the distances between the observations. Run k-means algorithm on the dataset. Investigate what is the optimal number of clusters and run the algorithm again. Visualize the clusters (for example with the pairs() or ggpairs() functions, where the clusters are separated with colors) and interpret the results. (4 points)
