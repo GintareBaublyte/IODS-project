@@ -14,7 +14,7 @@ library(dplyr)
 library('corrplot')
 data("Boston")
 ```
-The data used in this chapter describes housing Values in Suburbs of Boston. It has 506 observations and 14 variables.
+The data used in this chapter describes housing values in suburbs of Boston. It has 506 observations and 14 variables.
 
 ```{r}
 dim(Boston)
@@ -32,20 +32,20 @@ From the Pairs matrix it can be seen that some of the variables are strongly cor
 pairs(Boston, main = "Pairs matrix", upper.panel = NULL)
 ```
 
-To understand the correlations between variables better it is useful to look at the correlation matrix. As mentioned earlier, variables *nox* and *dis* or *lstat* and *medv* have strong correlations (negative) of -0.75 and -0.74 respectively. The strongest correlation seems to be between *rad* and *tax* (0.91). There are other variables with high correlations. They can be seen from the matrix as biggest circles either in red or in blue.
+To understand the correlations between variables better, it is useful to look at the correlation matrix (below). As mentioned earlier, variables *nox* and *dis* or *lstat* and *medv* have strong correlations (negative) of -0.75 and -0.74 respectively. The strongest correlation seems to be between *rad* and *tax* (0.91). There are other variables with high correlations. They can be seen from the matrix as biggest circles either in red or in blue.
 
 ```{r}
 cor_matrix<-cor(Boston) %>% round(digits = 2)
 corrplot.mixed(cor_matrix)
 ```
 
-The summaries bellow show smallest, highes and mean values of the variables, in addition to 1st and 3rd quartilles and median values. It can be seen that the variable data is using very different scales.
+##Scaling of data
+
+The summaries bellow show smallest, highes and mean values of the variables, in addition to other data. It can be seen that the variable data is using very different scales.
 
 ```{r}
 summary(Boston)
 ```
-
-##Scaling of data
 
 Since the range of values in the data is quite different and broad, it should be scaled, in order to be able to compare the data and make sure that all the variables contribute proportionally.  
 
@@ -54,7 +54,6 @@ boston_scaled <- scale(Boston)
 summary(boston_scaled)
 boston_scaled <- as.data.frame(boston_scaled)
 ```
-
 Now that the data is scaled, the ranges look similar. Note that the means are all zero.
 
 ##Categorical variable
@@ -77,7 +76,7 @@ boston_scaled <- data.frame(boston_scaled, crime)
 
 ##Dividing of data and LDA
 
-When using statistical methos to predict something, it is important to split the data to train and test sets and see how the model works (well or poorly). The train set is used to train the model and the test set is used to make predictions on data. 
+When using statistical methods to predict something, it is important to split the data to train and test sets and see how the model works (well or poorly). The train set is used to train the model and the test set is used to make predictions on data. 
 
 The data will be divided to these two sets, so that 80% of it would belong to the train set:
 
@@ -102,6 +101,10 @@ lda.arrows <- function(x, myscale = 1, arrow_heads = 0.1, color = "red", tex = 0
        cex = tex, col=color, pos=3)
 }
 classes <- as.numeric(train$crime)
+```
+The scatterplot of the LDA below shows that variable *rad* (index of accessibility to radial highways) is mostly linked with the high crime rates that are in the plot in colour blue. The remaining crime categories are scattered away from the high crime rate category and it's quite hard to see which variables are associated with which categories. Maybe it's quite safe to say that *nox* (nitrogen oxides concentration (parts per 10 million)) is associated with medium high crime rates that are in colour green.
+
+```{r}
 plot(lda.fit, dimen = 2, col = classes, pch = classes)
 lda.arrows(lda.fit, myscale = 2)
 ```
@@ -112,10 +115,62 @@ The crime categories from the test set will be saved and the categorical crime v
 correct_classes <- test$crime
 test <- dplyr::select(test, -crime)
 ```
+Now the classes will be predecited with the LDA model on the test data.
+
+```{r}
+lda.pred <- predict(lda.fit, newdata = test)
+```
+The results are cross tabulated below with the crime categories from the test set.
+
+```{r}
+table(correct = correct_classes, predicted = lda.pred$class)
+```
+
+*Note: the values in the cross tabulation will change every time the page is refreshed because it takes random observations to the test and train sets. Thus, the explanation bellow probably will not have relevant numbers.*
+
+From the cross tabulation table it can be seen that the model predicted 69 observations corretly and 33 were predicted incorrectly from total of 102 observations. That means that the accuracy of the prediction is 69/102 = 0,68.
+
+##Clustering
+
+The clustering will be done with the k-means method. 
+
+```{r}
+data("Boston")
+```
+
+```{r}
+boston_scaled <- scale(Boston)
+summary(boston_scaled)
+boston_scaled <- as.data.frame(boston_scaled)
+```
+
+Clustering is done based on distances between the objects. Bellow there is a summary of distances for the scaled Boston dataset.
+
+```{r}
+set.seed(123)
+dist_eu <- dist(boston_scaled)
+summary(dist_eu)
+```
+
+In order to determine the correct number of clusters the **Elbow method** will be used which is based on the calculation of the total of within cluster sum of squares (WCSS). 
+
+```{r}
+k_max <- 10
+```
+```{r}
+twcss <- sapply(1:k_max, function(k){kmeans(dist_eu, k)$tot.withinss})
+```
+
+```{r}
+plot(1:k_max, twcss, type = 'b')
+```
+
+In the grapgh above we can see that the value drops significantly from 1 to 2 and after that in decreases steadily. That shows us that the optimal number of clusters is 2. Thus the clustering will be done with 2 clusters.
 
 
+```{r}
+km <- kmeans(dist_eu, centers = 2)
+pairs(boston_scaled, col = km$cluster)
+```
 
-
-
-Save the crime categories from the test set and then remove the categorical crime variable from the test dataset. Then predict the classes with the LDA model on the test data. Cross tabulate the results with the crime categories from the test set. Comment on the results. (3 points)
-Reload the Boston dataset and standardize the dataset (we did not do this in the Datacamp exercises, but you should scale the variables to get comparable distances). Calculate the distances between the observations. Run k-means algorithm on the dataset. Investigate what is the optimal number of clusters and run the algorithm again. Visualize the clusters (for example with the pairs() or ggpairs() functions, where the clusters are separated with colors) and interpret the results. (4 points)
+The plot above shows that the distributiosn of variables are almost the same as those that were examined in the begining of this chapter. The colours indicate different clusters and in many plots it is quite easy to see how those clusters are separating the data.

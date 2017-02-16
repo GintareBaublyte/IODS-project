@@ -12,6 +12,7 @@ output:
     code_folding: hide
 ---
 
+---
 ***
   
 ```{r child = "chapter1.Rmd"}
@@ -25,4 +26,9 @@ output:
 ***
 
 ```{r child = "chapter3.Rmd"}
+```
+
+***
+  
+```{r child = "chapter4.Rmd"}
 ```
