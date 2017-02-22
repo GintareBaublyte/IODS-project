@@ -44,3 +44,64 @@ human <- hd_gii
 #save new data
 setwd("C:/Users/Severi/Documents/Open Data/IODS-project/data")
 write.table(human, file = "human.txt", sep = ";")
+
+
+#Data Wrangling continued
+
+#read the data
+
+setwd("C:/Users/Severi/Documents/Open Data/IODS-project/data")
+human <- read.table(file = "human.txt", sep = ";")
+
+#check the structure
+str(human)
+
+#load packages
+install.packages(tidyr)
+library(tidyr)
+
+install.packages(stringr)
+library(stringr)
+
+library(dplyr)
+
+#mutate the data
+#transform GNI variable to numeric (Using string manipulation)
+
+str(human$gni)
+str_replace(human$gni, pattern = ",", replace = "") %>% as.numeric
+
+# columns to keep
+keep <- c("country", "edu2FM", "labF", "lifeexp", "eduexp", "gni", "matmort", "adolbirth", "repparl")
+
+# select the 'keep' columns
+human <- dplyr::select(human, one_of(keep))
+
+# print out a completeness indicator of the 'human' data
+complete.cases(human)
+
+# print out the data along with a completeness indicator as the last column
+data.frame(human[-1], comp = complete.cases(human))
+
+# filter out all rows with NA values
+human_ <- filter(human, complete.cases(human))
+
+# look at the last 10 observations of human
+tail(human_, n=10)
+
+# define the last indice we want to keep
+last <- nrow(human_) - 7
+
+# choose everything until the last 7 observations
+human_ <- human_[1:last, ]
+
+# add countries as rownames
+rownames(human_) <- human_$country
+
+# remove the Country variable
+human_ <- dplyr::select(human_, -country)
+
+#save new data
+setwd("C:/Users/Severi/Documents/Open Data/IODS-project/data")
+write.table(human, file = "human2.txt", sep = ";", row.names = TRUE)
+
