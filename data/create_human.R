@@ -69,7 +69,7 @@ library(dplyr)
 #transform GNI variable to numeric (Using string manipulation)
 
 str(human$gni)
-str_replace(human$gni, pattern = ",", replace = "") %>% as.numeric
+human$gni <- str_replace(human$gni, pattern = ",", replace = "") %>% as.numeric
 
 # columns to keep
 keep <- c("country", "edu2FM", "labF", "lifeexp", "eduexp", "gni", "matmort", "adolbirth", "repparl")
@@ -103,5 +103,6 @@ human_ <- dplyr::select(human_, -country)
 
 #save new data
 setwd("C:/Users/Severi/Documents/Open Data/IODS-project/data")
-write.table(human, file = "human2.txt", sep = ";", row.names = TRUE)
+write.table(human_, file = "human2.txt", sep = ";", row.names = TRUE)
+human_ <- read.table(file = "human2.txt", sep = ";")
 

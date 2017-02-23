@@ -1,0 +1,108 @@
+---
+output:
+  html_document:
+    code_folding: hide
+---
+
+#Dimensionality reduction techniques
+
+##The Data
+
+The dataset originates from the United Nations Development Programme. The data has been mutated and now it contains 155 observations and 8 variables in the dataset. The variables in the dataset are listed below. 
+
+```{r, message=FALSE}
+setwd("C:/Users/Severi/Documents/Open Data/IODS-project/data")
+library(MASS)
+library(dplyr)
+library('corrplot')
+library(GGally)
+human_ <- read.table(file = "human2.txt", sep = ";")
+```
+
+
+```{r}
+str(human_)
+dim(human_)
+```
+
+- *edu2FM* - Female/male ratio in secondary education  
+- *labF* - Proportion of females in the labour force  
+- *lifeexp* - Life expectancy at birth  
+- *eduexp* - Expected years of schooling  
+- *gni* -  Gross National Income per capita  
+- *matmort* - Maternal mortality ratio  
+- *adolbirth* - Adolescent birth rate  
+- *repparl* - Percetange of female representatives in parliament  
+
+
+
+The graph below shows that variables *edu2FM* (female/male ration in secondary education), *labF* (proportion of females in the labour force), *eduexp* (expected years of schooling) and *repparl* (percentage of female representatives in the parliament) are normally distributed. Correlation seems to be strong between *lifeexp* (life expectancy at birth) and *matmort* (maternal mortality ration); however, to visualize the correlations better, let's look at the next graph.
+
+
+```{r}
+ggpairs(human_)
+```
+
+The correlation plot shows strong negative correlation between the previously mentioned variables: *lifeexp* and *matmort*. Also strong negative correlation is between *lifeexp*-*adolbirth*, *eduexp*-*marmort*, and *eduexp*-*adolbirth*. Strong positive correlation is noticable between *lifeexp*-*eduexp* and *marmort*-*adolbirth*.
+
+```{r}
+cor_matrix<-cor(human_) %>% round(digits = 2)
+corrplot.mixed(cor_matrix)
+```
+
+The summaries of the variables are below. The female/male ration in secondary education (*edu2FM*) on average is about 0.85. Proportion of females in the labour fource (*labF*) ranges from 13.5 to 88.1 with average of 52.5. Gross National Income per capita (*gni*) range is really big (from 581 to 123124). Interestingly, our data shows that some Parliaments have no women representatives.
+
+```{r}
+summary(human_)
+```
+
+##Principal Component Analysis (PCA)
+
+PCA will now be performed on the non-standartized data.The summary below shows that using unstandartized data (with high differences in variable scales) provides us with components that explain very low variance. Thus, the data needs to be standartized.
+
+
+```{r}
+pca_human <- prcomp(human_)
+summary(pca_human)
+```
+The same goes for the biplot below which clearly indicates that *gni* has much bigger scale than all the other variables.
+
+```{r}
+biplot(pca_human, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
+```
+
+The data will, therefore, be standartized.  
+
+The summary of variables now shows that the scale is now more similar between different variables, thus the PCA can now be performed again.
+
+```{r}
+human_std <- scale(human_)
+summary(human_std)
+```
+
+The summary shows that now 2 first components explain about 70% of variance, thus the results of the PCA are much better after the data has been standartized.
+
+```{r}
+pca_human2 <- prcomp(human_std)
+summary(pca_human2)
+```
+
+So the biplot now snows high correlation between matmort-adolbirth. In addition to that the variables gni, eduexp, edu2FM and lifeexp seems to be correlated with each other as well. repparl is mostly correlated with labF; other variables have low correlation with repparl.
+
+It looks like matmort and adolbirth contribute to the dimension of the PC1, while 
+
+
+
+The angle between arrows representing the original features can be interpreted as the correlation between the features. Small angle = high positive corr.
+
+The angle between a feature and a principal component axix can be interpreted as the corr between the two. Small angle = high positive corr.
+
+The lenght of the arrow are proportional to the standard deviations of the features.
+
+
+```{r}
+biplot(pca_human2, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
+```
+
+
+##Tea dataset
