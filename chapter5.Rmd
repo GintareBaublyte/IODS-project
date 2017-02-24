@@ -10,12 +10,14 @@ output:
 
 The dataset originates from the United Nations Development Programme. The data has been mutated and now it contains 155 observations and 8 variables in the dataset. The variables in the dataset are listed below. 
 
-```{r, message=FALSE}
+```{r, message=FALSE, warning=FALSE}
 setwd("C:/Users/Severi/Documents/Open Data/IODS-project/data")
 library(MASS)
 library(dplyr)
 library('corrplot')
 library(GGally)
+library(tidyr)
+library(ggplot2)
 human_ <- read.table(file = "human2.txt", sep = ";")
 ```
 
@@ -67,7 +69,7 @@ summary(pca_human)
 ```
 The same goes for the biplot below which clearly indicates that *gni* has much bigger scale than all the other variables.
 
-```{r}
+```{r, warning=FALSE}
 biplot(pca_human, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
 ```
 
@@ -87,18 +89,15 @@ pca_human2 <- prcomp(human_std)
 summary(pca_human2)
 ```
 
-So the biplot now snows high correlation between matmort-adolbirth. In addition to that the variables gni, eduexp, edu2FM and lifeexp seems to be correlated with each other as well. repparl is mostly correlated with labF; other variables have low correlation with repparl.
+So the biplot now shows high correlation between *matmort* and *adolbirth*. In addition to that the variables *gni*, *eduexp*, *edu2FM* and *lifeexp* seems to be correlated with each other as well. *repparl* is mostly correlated with *labF*; other variables have low/no correlation with *repparl*.
 
-It looks like matmort and adolbirth contribute to the dimension of the PC1, while 
+It looks like *matmort*, *adolbirth*, *gni*, *eduexp*, *edu2FM* and *lifeexp* contribute to the dimension of the PC1, while *repparl* and *labF* best define PC2.
 
+The variables that define PC1 are clearly devided into two groups.One group of variables consists of *eduexp* (expected years of schooling), *gni* (Gross National Income per capita), *edu2FM* (female/male ratio in secondary education), and *lifeexp* (life expectancy at birth). The other group defining PC1 contains *matmort* (maternal mortality ratio) and *adolbirth* (adolescent birth rate). These groups together explain education, health and general wealth phenomenons. 
 
+The second principal component that is defined by *repparl* (percentage of female representatives in the parliament) and *labF* (proportion of females in the labour force) explains the gender diversity phenomenon.
 
-The angle between arrows representing the original features can be interpreted as the correlation between the features. Small angle = high positive corr.
-
-The angle between a feature and a principal component axix can be interpreted as the corr between the two. Small angle = high positive corr.
-
-The lenght of the arrow are proportional to the standard deviations of the features.
-
+The plot indicates that such countries as, e.g. Iceland, Norway, Sweden, Denmank have not only high gross national income per capita but also are high in gender diversity and life expentancy. Whereas, Saudi Arabia, Qatar, Bahrain are high in GNI, but don't have a good situation in gender diversity issues. Countries in Africa seem to have high mortality, poor education and low income.
 
 ```{r}
 biplot(pca_human2, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"))
@@ -106,3 +105,48 @@ biplot(pca_human2, choices = 1:2, cex = c(0.8, 1), col = c("grey40", "deeppink2"
 
 
 ##Tea dataset
+
+New dataset is now loaded. It is related to tea consumption. The data has 300 observations and 36 variables.
+
+```{r}
+library(FactoMineR)
+data("tea")
+dim(tea)
+```
+It seems that the variables are related to the time people drink their tea, the places where they drink, how and why they drink it and some other information.
+
+```{r}
+str(tea)
+```
+Only the variables realted to type of tea, way of drinking, frequency of drinking tea and wheather or not tea drinking is feminine or spiritual will be analysed. Their summaries are below.
+
+
+```{r}
+keep_columns <- c("Tea", "How", "how", "feminine", "frequency", "spirituality")
+tea_time <- dplyr::select(tea, one_of(keep_columns))
+summary(tea_time)
+```
+
+The data shows that more respondents think that drinking tea is not a feminine and not a spiritual activity. Most people drink tea more than twice a day. Also more than half of the respondens drink tea using a tea bag. Plain tea without any milk or lemon seems to be the preffered choice, as well as Earl Grey compared to black or green.
+
+```{r, warning=FALSE}
+gather(tea_time) %>% ggplot(aes(value)) + facet_wrap("key", scales = "free") + geom_bar() + theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))
+```
+
+There are 12 dimensions based on the summary below.
+
+```{r}
+mca <- MCA(tea_time, graph = FALSE)
+summary(mca)
+```
+
+The MCA factor map shows that people who preffer drinking tea alone, like it to be Earl Grey or green. It seems that those who view tea drinking as non spiritual also think it's not a feminine activity, while those who associate it with femininity also think it's spiritual.
+
+```{r}
+plot(mca, invisible = c("ind"), habillage = "quali")
+```
+
+
+
+
+
