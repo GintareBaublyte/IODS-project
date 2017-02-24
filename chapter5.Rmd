@@ -45,14 +45,14 @@ The graph below shows that variables *edu2FM* (female/male ration in secondary e
 ggpairs(human_)
 ```
 
-The correlation plot shows strong negative correlation between the previously mentioned variables: *lifeexp* and *matmort*. Also strong negative correlation is between *lifeexp*-*adolbirth*, *eduexp*-*marmort*, and *eduexp*-*adolbirth*. Strong positive correlation is noticable between *lifeexp*-*eduexp* and *marmort*-*adolbirth*.
+The correlation plot shows strong negative correlation between the previously mentioned variables: *lifeexp* and *matmort*. Also strong negative correlation is between *lifeexp*-*adolbirth*, *eduexp*-*matmort*, and *eduexp*-*adolbirth*. Strong positive correlation is noticable between *lifeexp*-*eduexp* and *marmort*-*adolbirth*.
 
 ```{r}
 cor_matrix<-cor(human_) %>% round(digits = 2)
 corrplot.mixed(cor_matrix)
 ```
 
-The summaries of the variables are below. The female/male ration in secondary education (*edu2FM*) on average is about 0.85. Proportion of females in the labour fource (*labF*) ranges from 13.5 to 88.1 with average of 52.5. Gross National Income per capita (*gni*) range is really big (from 581 to 123124). Interestingly, our data shows that some Parliaments have no women representatives.
+The summaries of the variables are below. The female/male ratio in secondary education (*edu2FM*) on average is about 0.85. Proportion of females in the labour force (*labF*) ranges from 13.5 to 88.1 with average of 52.5. Gross National Income per capita (*gni*) range is really big (from 581 to 123124). Interestingly, our data shows that some Parliaments have no women representatives.
 
 ```{r}
 summary(human_)
@@ -88,8 +88,7 @@ The summary shows that now 2 first components explain about 70% of variance, thu
 pca_human2 <- prcomp(human_std)
 summary(pca_human2)
 ```
-
-So the biplot now shows high correlation between *matmort* and *adolbirth*. In addition to that the variables *gni*, *eduexp*, *edu2FM* and *lifeexp* seems to be correlated with each other as well. *repparl* is mostly correlated with *labF*; other variables have low/no correlation with *repparl*.
+The biplot shows high correlation between *matmort* and *adolbirth*. In addition to that the variables *gni*, *eduexp*, *edu2FM* and *lifeexp* seems to be correlated with each other as well. *repparl* is mostly correlated with *labF*; other variables have low/no correlation with *repparl*.
 
 It looks like *matmort*, *adolbirth*, *gni*, *eduexp*, *edu2FM* and *lifeexp* contribute to the dimension of the PC1, while *repparl* and *labF* best define PC2.
 
